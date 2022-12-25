@@ -61,5 +61,30 @@ namespace Employee_Payroll_ADO.NET
                 Console.WriteLine(ex.Message);
             }
         }
+        public void UpdateEmployeeSalary()
+        {
+            try
+            {
+                using (this.connection)
+                {
+                    this.connection.Open();
+                    SqlCommand command = new SqlCommand("SPUpdateEmployeeSalary", this.connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    int result = command.ExecuteNonQuery();
+                    this.connection.Close();
+                    if (result >= 1)
+                    {
+                        Console.WriteLine("Employee BasicPay Updated Successfully");
+                    }
+                    else
+                        Console.WriteLine("Updation Failed");
+                }
+            }
+            catch (Exception ex)
+            {
+                // handle exception here
+                Console.WriteLine(ex.Message);
+            }
+        }
     }
 }
