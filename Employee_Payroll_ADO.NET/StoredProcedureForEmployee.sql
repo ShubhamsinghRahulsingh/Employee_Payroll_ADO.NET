@@ -19,3 +19,16 @@ UPDATE PayRoll SET TaxablePay = (BasicPay - Deductions);
 UPDATE PayRoll SET NetPay = (TaxablePay - IncomeTax);
 END
 
+--Retrieve Data By Given Name
+CREATE PROCEDURE SPGetAllEmployeesByName(
+@EmployeeName VARCHAR(30)
+)
+AS BEGIN
+SELECT EmployeeName,CompanyName,Gender,EmployeeAddress,BasicPay,Deductions,TaxablePay,IncomeTax,NetPay,StartDate,DepartmentName
+FROM Company 
+INNER JOIN Employee ON Employee.CompanyID = Company.CompanyID 
+INNER JOIN PayRoll ON PayRoll.EmployeeID = Employee.EmployeeID
+INNER JOIN EmployeeDepartment ON EmployeeDepartment.EmployeeID = Employee.EmployeeID
+INNER JOIN Department ON Department.DepartmentID = EmployeeDepartment.DepartmentID
+WHERE EmployeeName=@EmployeeName
+END
