@@ -11,7 +11,7 @@ namespace Employee_Payroll_ADO.NET
             while(flag)
             {
                 Console.WriteLine("-------------------------------------------------");
-                Console.WriteLine("Select From the Following\n1.Retrieve All Data From Database\n2.Updating Employee Salary\n3.RetrieveAllEmployeesDataByName\n4.Exit");
+                Console.WriteLine("Select From the Following\n1.Retrieve All Data From Database\n2.Updating Employee Salary\n3.Retrieve All Employees Data ByName\n4.Retrieving Employees For Given Range\n5.Exit");
                 Console.Write("Enter Your Option:");
                 int opt=Convert.ToInt32(Console.ReadLine());
                 switch(opt)
@@ -26,6 +26,9 @@ namespace Employee_Payroll_ADO.NET
                         employeeRepository.GetAllEmployeesByName("Shubham");
                         break;
                     case 4:
+                        employeeRepository.GetAllEmployeesInPartiCularPeriod();
+                        break;
+                    case 5:
                         flag = false;
                         break;
                 }

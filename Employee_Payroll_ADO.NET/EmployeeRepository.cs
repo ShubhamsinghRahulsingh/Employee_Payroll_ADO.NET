@@ -134,5 +134,52 @@ namespace Employee_Payroll_ADO.NET
                 Console.WriteLine(ex.Message);
             }
         }
+        public void GetAllEmployeesInPartiCularPeriod()
+        {
+            try
+            {
+                List<Employee> employee = new List<Employee>();
+                using (this.connection)
+                {
+                    this.connection.Open();
+                    SqlCommand command = new SqlCommand("SPEmployees_ForParticularRange", this.connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    SqlDataReader dr = command.ExecuteReader();
+                    if (dr.HasRows)
+                    {
+                        while (dr.Read())
+                        {
+                            Employee emp = new Employee();
+                            emp.EmployeeName = dr.GetString(0);
+                            emp.CompanyName = dr.GetString(1);
+                            emp.Gender = dr.GetString(2);
+                            emp.EmployeeAddress = dr.GetString(3);
+                            emp.BasicPay = dr.GetDouble(4);
+                            emp.Deductions = dr.GetDouble(5);
+                            emp.TaxablePay = dr.GetDouble(6);
+                            emp.IncomeTax = dr.GetDouble(7);
+                            emp.NetPay = dr.GetDouble(8);
+                            emp.StartDate = dr.GetDateTime(9);
+                            emp.DepartmentName = dr.GetString(10);
+                            employee.Add(emp);
+                        }
+                        Console.WriteLine("EmployeeName" + "  " + "CompanyName" + "  " + "Gender" + "  " + "EmployeeAddress" + "  " + "BasicPay" + "  " + "Deductions" + "  " + "TaxablePay" + "  " + "IncomeTax" + "     " + "NetPay" + "         " + "StartDate" + "        " + "DepartmentName");
+                        foreach (var data in employee)
+                        {
+                            Console.WriteLine(data.EmployeeName + "           " + data.CompanyName + "          " + data.Gender + "     " + data.EmployeeAddress + "   " + data.BasicPay + "      " + data.Deductions + "      " + data.TaxablePay + "   " + data.IncomeTax + "     " + data.NetPay + "       " + data.StartDate + "      " + data.DepartmentName);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Not Find The Given Date");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // handle exception here
+                Console.WriteLine(ex.Message);
+            }
+        }
     }
 }

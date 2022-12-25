@@ -32,3 +32,14 @@ INNER JOIN EmployeeDepartment ON EmployeeDepartment.EmployeeID = Employee.Employ
 INNER JOIN Department ON Department.DepartmentID = EmployeeDepartment.DepartmentID
 WHERE EmployeeName=@EmployeeName
 END
+
+--Retrieve Data Btw Given Range
+CREATE PROCEDURE SPEmployees_ForParticularRange
+AS BEGIN
+SELECT EmployeeName,CompanyName,Gender,EmployeeAddress,BasicPay,Deductions,TaxablePay,IncomeTax,NetPay,StartDate,DepartmentName
+FROM Company
+INNER JOIN Employee ON Employee.CompanyID = Company.CompanyID AND StartDate BETWEEN CAST('2017-09-15' AS DATE) AND GETDATE()
+INNER JOIN PayRoll ON PayRoll.EmployeeID = Employee.EmployeeID
+INNER JOIN EmployeeDepartment ON EmployeeDepartment.EmployeeID = Employee.EmployeeID
+INNER JOIN Department ON Department.DepartmentID = EmployeeDepartment.DepartmentID
+END
