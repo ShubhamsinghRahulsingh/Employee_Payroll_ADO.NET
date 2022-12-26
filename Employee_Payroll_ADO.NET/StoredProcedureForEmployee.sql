@@ -43,3 +43,15 @@ INNER JOIN PayRoll ON PayRoll.EmployeeID = Employee.EmployeeID
 INNER JOIN EmployeeDepartment ON EmployeeDepartment.EmployeeID = Employee.EmployeeID
 INNER JOIN Department ON Department.DepartmentID = EmployeeDepartment.DepartmentID
 END
+
+--Use Database Functions
+CREATE PROCEDURE SPUsingDatabaseFunction
+AS BEGIN
+SELECT COUNT(*) AS NoOfContacts,MAX(BasicPay) AS MaximumSalary,MIN(BasicPay) AS MinimumSalary,AVG(BasicPay) AS AverageSalary,SUM(BasicPay) AS TotalSalary,Gender
+FROM Company
+INNER JOIN Employee ON Employee.CompanyID = Company.CompanyID
+INNER JOIN PayRoll ON PayRoll.EmployeeID = Employee.EmployeeID
+INNER JOIN EmployeeDepartment ON EmployeeDepartment.EmployeeID = Employee.EmployeeID
+INNER JOIN Department ON Department.DepartmentID = EmployeeDepartment.DepartmentID
+GROUP BY Gender
+END

@@ -13,16 +13,16 @@ namespace Employee_Payroll_ADO.NET
     {
         //Specifying the connection string from the sql server connection.
         public static string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PAYROLL_SERVICES;Integrated Security=true;";
-        SqlConnection connection = new SqlConnection(connectionString);    // Establishing the connection using the Sqlconnection.
         public void GetAllEmployees()
         {
             try
             {
+                SqlConnection connection = new SqlConnection(connectionString);    // Establishing the connection using the Sqlconnection.
                 List<Employee> employee = new List<Employee>();
-                using (this.connection)
+                using (connection)
                 {
-                    this.connection.Open();
-                    SqlCommand command = new SqlCommand("SPGetAllEmployees", this.connection);
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("SPGetAllEmployees", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     SqlDataReader dr = command.ExecuteReader();
                     if (dr.HasRows)
@@ -65,13 +65,14 @@ namespace Employee_Payroll_ADO.NET
         {
             try
             {
-                using (this.connection)
+                SqlConnection connection = new SqlConnection(connectionString);
+                using (connection)
                 {
-                    this.connection.Open();
-                    SqlCommand command = new SqlCommand("SPUpdateEmployeeSalary", this.connection);
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("SPUpdateEmployeeSalary",connection);
                     command.CommandType = CommandType.StoredProcedure;
                     int result = command.ExecuteNonQuery();
-                    this.connection.Close();
+                    connection.Close();
                     if (result >= 1)
                     {
                         Console.WriteLine("Employee BasicPay Updated Successfully");
@@ -90,11 +91,12 @@ namespace Employee_Payroll_ADO.NET
         {
             try
             {
+                SqlConnection connection = new SqlConnection(connectionString);
                 List<Employee> employee = new List<Employee>();
-                using (this.connection)
+                using (connection)
                 {
-                    this.connection.Open();
-                    SqlCommand command = new SqlCommand("SPGetAllEmployeesByName", this.connection);
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("SPGetAllEmployeesByName", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@EmployeeName", name);
                     SqlDataReader dr = command.ExecuteReader();
@@ -138,11 +140,12 @@ namespace Employee_Payroll_ADO.NET
         {
             try
             {
+                SqlConnection connection = new SqlConnection(connectionString);
                 List<Employee> employee = new List<Employee>();
-                using (this.connection)
+                using (connection)
                 {
-                    this.connection.Open();
-                    SqlCommand command = new SqlCommand("SPEmployees_ForParticularRange", this.connection);
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("SPEmployees_ForParticularRange", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     SqlDataReader dr = command.ExecuteReader();
                     if (dr.HasRows)
@@ -167,6 +170,37 @@ namespace Employee_Payroll_ADO.NET
                         foreach (var data in employee)
                         {
                             Console.WriteLine(data.EmployeeName + "           " + data.CompanyName + "          " + data.Gender + "     " + data.EmployeeAddress + "   " + data.BasicPay + "      " + data.Deductions + "      " + data.TaxablePay + "   " + data.IncomeTax + "     " + data.NetPay + "       " + data.StartDate + "      " + data.DepartmentName);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Not Find The Given Date");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // handle exception here
+                Console.WriteLine(ex.Message);
+            }
+        }
+        public void UsingDatabaseFunctions()
+        {
+            try
+            {
+                SqlConnection connection = new SqlConnection(connectionString);
+                using (connection)
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("SPUsingDatabaseFunction", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    SqlDataReader dr = command.ExecuteReader();
+                    if (dr.HasRows)
+                    {
+                        Console.WriteLine("NoOfContacts:"+ "  MaximumSalary:  "+"  MinimumSalary:"+"  AverageSalary:"+"  TotalSalary:"+"  Gender:");
+                        while (dr.Read())
+                        {
+                            Console.WriteLine(dr.GetInt32(0)+"          "+dr.GetDouble(1)+"          "+dr.GetDouble(2)+"       "+dr.GetDouble(3)+"         "+dr.GetDouble(4)+"        "+dr.GetDouble(5)+"        "+dr.GetString(6)); 
                         }
                     }
                     else
